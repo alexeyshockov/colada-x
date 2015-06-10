@@ -1,0 +1,40 @@
+{
+    "name":        "alexeyshockov/colada-x",
+    "type":        "library",
+    "description": "Helper function for simplification callbacks",
+    "keywords":    ["collections"],
+    "homepage":    "http://github.com/alexeyshockov/colada-x",
+    "license":     "MIT",
+    "support":     {
+        "issues": "https://github.com/alexeyshockov/colada-x/issues"
+    },
+
+    "authors": [
+        {
+            "name":     "Alexey Shockov",
+            "email":    "alexey@shockov.com",
+            "homepage": "http://alexey.shockov.com/"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.3.2"
+    },
+
+    "require-dev": {
+        "phpspec/phpspec": "@stable"
+    },
+
+    "config": {
+        "bin-dir": "bin"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Colada\\X\\": "src/Colada/X"
+        },
+        "files": [
+            "src/Colada/functions.php"
+        ]
+    }
+}
