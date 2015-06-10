@@ -22,4 +22,4 @@ install:
   - composer install --no-interaction --prefer-source
 
 script:
-  - ./bin/phpspec run -f pretty -v
+  - ./bin/phpspec run -v
