@@ -1,4 +1,6 @@
-# Colada X. PHP callbacks shorter
+# \Colada\x()
+
+Helper function for simplification callbacks.
 
 [![Build Status](https://api.travis-ci.org/alexeyshockov/colada-x.svg?branch=master)](http://travis-ci.org/alexeyshockov/colada-x)
 
