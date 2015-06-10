@@ -1,5 +1,7 @@
 # \Colada\x()
 
+[![Join the chat at https://gitter.im/alexeyshockov/colada-x](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/alexeyshockov/colada-x?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Helper function for simplification callbacks.
 
 [![Build Status](https://api.travis-ci.org/alexeyshockov/colada-x.svg?branch=master)](http://travis-ci.org/alexeyshockov/colada-x)
