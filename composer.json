@@ -2,13 +2,12 @@
     "name":        "alexeyshockov/colada-x",
     "type":        "library",
     "description": "Helper function for simplification callbacks",
-    "keywords":    ["collections"],
+    "keywords":    ["collections", "functional"],
     "homepage":    "http://github.com/alexeyshockov/colada-x",
     "license":     "MIT",
     "support":     {
         "issues": "https://github.com/alexeyshockov/colada-x/issues"
     },
-
     "authors": [
         {
             "name":     "Alexey Shockov",
@@ -16,25 +15,26 @@
             "homepage": "http://alexey.shockov.com/"
         }
     ],
-
     "require": {
-        "php": ">=5.3.2"
+        "php": ">=5.4.0"
     },
-
     "require-dev": {
-        "phpspec/phpspec": "@stable"
+        "phpspec/phpspec": "~2.3",
+        "lstrojny/functional-php": "~1.2@dev",
+        "danielstjules/stringy": "~2.1",
+        "nesbot/carbon": "~1.0"
     },
-
-    "config": {
-        "bin-dir": "bin"
-    },
-
+    "suggest": {
+        "lstrojny/functional-php": "To work with collections in a functional way",
+        "danielstjules/stringy": "As a helper for strings",
+        "nesbot/carbon": "As a helper for working with date and time"
+    }
     "autoload": {
         "psr-4": {
             "Colada\\X\\": "src/Colada/X"
         },
         "files": [
-            "src/Colada/functions.php"
+            "src/functions.php"
         ]
     }
 }

@@ -2,12 +2,15 @@
 
 namespace Colada\X;
 
+use ArrayAccess;
+use BadMethodCallException;
+
 /**
- * @author Alexey Shockov <alexey@shockov.com>
+ * Immutable value wrapper.
  *
- * @internal
+ * @author Alexey Shockov <alexey@shockov.com>
  */
-class Value implements \ArrayAccess
+class Value implements ArrayAccess, ValueWrapper
 {
     /**
      * @var mixed
@@ -15,17 +18,36 @@ class Value implements \ArrayAccess
     private $value;
 
     /**
-     * @param mixed $value
+     * @var array
      */
-    public function __construct($value = null)
+    private $helpers;
+
+    /**
+     * @param array $helpers
+     *
+     * @return \Closure
+     */
+    public static function getConstructorForValue($helpers = array())
+    {
+        return function ($value) use ($helpers) {
+            return new static($value, $helpers);
+        };
+    }
+
+    /**
+     * @param mixed $value
+     * @param array $helpers
+     */
+    public function __construct($value = null, $helpers = array())
     {
         $this->value = $value;
+        $this->helpers = $helpers;
     }
 
     /**
      * @return mixed
      */
-    public function __getValue()
+    public function __getWrappedValue()
     {
         return $this->value;
     }
@@ -37,11 +59,11 @@ class Value implements \ArrayAccess
      */
     public function offsetGet($key)
     {
-        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof \ArrayAccess))) {
+        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof ArrayAccess))) {
             return new static($this->value[$key]);
         }
 
-        throw new \BadMethodCallException('ArrayAccess unsupported for current value.');
+        throw new BadMethodCallException('ArrayAccess unsupported for current value.');
     }
 
     /**
@@ -51,13 +73,13 @@ class Value implements \ArrayAccess
      */
     public function offsetUnset($key)
     {
-        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof \ArrayAccess))) {
+        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof ArrayAccess))) {
             unset($this->value[$key]);
 
             return;
         }
 
-        throw new \BadMethodCallException('ArrayAccess unsupported for current value.');
+        throw new BadMethodCallException('ArrayAccess unsupported for current value.');
     }
 
     /**
@@ -67,11 +89,11 @@ class Value implements \ArrayAccess
      */
     public function offsetExists($key)
     {
-        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof \ArrayAccess))) {
+        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof ArrayAccess))) {
             return isset($this->value[$key]);
         }
 
-        throw new \BadMethodCallException('ArrayAccess unsupported for current value.');
+        throw new BadMethodCallException('ArrayAccess unsupported for current value.');
     }
 
     /**
@@ -82,13 +104,13 @@ class Value implements \ArrayAccess
      */
     public function offsetSet($key, $value)
     {
-        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof \ArrayAccess))) {
+        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof ArrayAccess))) {
             $this->value[$key] = $value;
 
             return;
         }
 
-        throw new \BadMethodCallException('ArrayAccess unsupported for current value.');
+        throw new BadMethodCallException('ArrayAccess unsupported for current value.');
     }
 
     /**
@@ -102,7 +124,7 @@ class Value implements \ArrayAccess
             return new static($this->value->$field);
         }
 
-        throw new \BadMethodCallException('__get() is unsupported for current value.');
+        throw new BadMethodCallException('__get() is unsupported for current value.');
     }
 
     /**
@@ -117,7 +139,7 @@ class Value implements \ArrayAccess
             $this->value->$field = $value;
         }
 
-        throw new \BadMethodCallException('__set() is unsupported for current value.');
+        throw new BadMethodCallException('__set() is unsupported for current value.');
     }
 
     public function __isset($field)
@@ -126,7 +148,7 @@ class Value implements \ArrayAccess
             return isset($this->value->$field);
         }
 
-        throw new \BadMethodCallException('__isset() is unsupported for current value.');
+        throw new BadMethodCallException('__isset() is unsupported for current value.');
     }
 
     public function __unset($field)
@@ -137,7 +159,7 @@ class Value implements \ArrayAccess
             return;
         }
 
-        throw new \BadMethodCallException('__unset() is unsupported for current value.');
+        throw new BadMethodCallException('__unset() is unsupported for current value.');
     }
 
     /**
@@ -148,17 +170,15 @@ class Value implements \ArrayAccess
      */
     public function __call($name, $arguments)
     {
-        $helpers = ValueHelperCollection::getInstance();
-
-        $method = null;
         if (is_object($this->value) && is_callable(array($this->value, $name))) {
             $method = array($this->value, $name);
-        } elseif (isset($helpers[$name])) {
-            $method = $helpers[$name];
+        } elseif (isset($this->helpers[$name])) {
+            // TODO Check callable.
+            $method = $this->helpers[$name];
 
             array_unshift($arguments, $this->value);
         } else {
-            throw new \BadMethodCallException('Unknown method "'.$name.'".');
+            throw new BadMethodCallException('Unknown method "' . $name . '".');
         }
 
         $result = call_user_func_array($method, $arguments);
@@ -171,6 +191,7 @@ class Value implements \ArrayAccess
      */
     public function __toString()
     {
+        // TODO Write something for objects without __toString().
         return (string) $this->value;
     }
 }
