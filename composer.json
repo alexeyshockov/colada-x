@@ -28,7 +28,7 @@
         "lstrojny/functional-php": "To work with collections in a functional way",
         "danielstjules/stringy": "As a helper for strings",
         "nesbot/carbon": "As a helper for working with date and time"
-    }
+    },
     "autoload": {
         "psr-4": {
             "Colada\\X\\": "src/Colada/X"
