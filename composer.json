@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "phpspec/phpspec": "~2.3",
-        "lstrojny/functional-php": "~1.2@dev",
+        "lstrojny/functional-php": "~1.0",
         "danielstjules/stringy": "~2.1",
         "nesbot/carbon": "~1.0"
     },
