@@ -1,26 +1,38 @@
 # \Colada\x()
 
-Helper function for simplification callbacks.
+Helper function for simplify callbacks.
 
+[![Latest Stable Version](https://poser.pugx.org/alexeyshockov/colada-x/v/stable)](https://packagist.org/packages/alexeyshockov/colada-x)
+[![Latest Unstable Version](https://poser.pugx.org/alexeyshockov/colada-x/v/unstable)](https://packagist.org/packages/alexeyshockov/colada-x)
 [![Build Status](https://api.travis-ci.org/alexeyshockov/colada-x.svg?branch=master)](http://travis-ci.org/alexeyshockov/colada-x)
 
 ## Installation
 
 ```bash
-composer require alexeyshockov/colada-x
+$ composer require alexeyshockov/colada-x
 ```
 
 ## Usage
 
-With Colada X:
+With ColadaX:
 ```php
 $activeUsers = array_filter($users, \Colada\x()->isActive());
+```
+```php
+$role = 'ADMIN';
+$administrators = array_filter($users, \Colada\x()->hasRole($role));
 ```
 
 Instead of pure PHP:
 ```php
 $activeUsers = array_filter($users, function ($user) {
-    $user->isActive()
+    return $user->isActive();
+});
+```
+```php
+$role = 'ADMIN';
+$activeUsers = array_filter($users, function ($user) use ($role) {
+    return $user->hasRole($role);
 });
 ```
 
@@ -40,7 +52,7 @@ $activeUsers = $users->filter(\Colada\x()->isActive());
 $activeUsers = $users->filter(\Colada\x()->isActive());
 ```
 
-### functional-php
+### functional-php ([lstrojny/functional-php](https://github.com/lstrojny/functional-php))
 
 The library already has `partial_method` function, but it's less powerful.
 
