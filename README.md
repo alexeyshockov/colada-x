@@ -3,7 +3,7 @@
 Helper function for simplify callbacks.
 
 [![Latest Stable Version](https://poser.pugx.org/alexeyshockov/colada-x/v/stable)](https://packagist.org/packages/alexeyshockov/colada-x)
-[![Latest Unstable Version](https://poser.pugx.org/alexeyshockov/colada-x/v/unstable)](https://packagist.org/packages/alexeyshockov/colada-x)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alexeyshockov/colada-x/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alexeyshockov/colada-x/?branch=master)
 [![Build Status](https://api.travis-ci.org/alexeyshockov/colada-x.svg?branch=master)](http://travis-ci.org/alexeyshockov/colada-x)
 
 ## Installation
