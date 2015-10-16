@@ -38,7 +38,7 @@ class ValueSpec extends ObjectBehavior
 
     function it_proxies_array_access()
     {
-        $array = new ArrayObject(array(1,2,3));
+        $array = new ArrayObject(array(1, 2, 3));
 
         $this->beConstructedWith($array);
 

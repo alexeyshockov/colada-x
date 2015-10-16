@@ -27,7 +27,7 @@ class Value implements ArrayAccess, ValueWrapper
      *
      * @return \Closure
      */
-    public static function getConstructorForValue($helpers = array())
+    public static function getConstructorForValue(array $helpers = array())
     {
         return function ($value) use ($helpers) {
             return new static($value, $helpers);
@@ -38,7 +38,7 @@ class Value implements ArrayAccess, ValueWrapper
      * @param mixed $value
      * @param array $helpers
      */
-    public function __construct($value = null, $helpers = array())
+    public function __construct($value = null, array $helpers = array())
     {
         $this->value = $value;
         $this->helpers = $helpers;
@@ -59,7 +59,7 @@ class Value implements ArrayAccess, ValueWrapper
      */
     public function offsetGet($key)
     {
-        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof ArrayAccess))) {
+        if (is_array_accessible($this->value)) {
             return new static($this->value[$key]);
         }
 
@@ -73,7 +73,7 @@ class Value implements ArrayAccess, ValueWrapper
      */
     public function offsetUnset($key)
     {
-        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof ArrayAccess))) {
+        if (is_array_accessible($this->value)) {
             unset($this->value[$key]);
 
             return;
@@ -89,7 +89,7 @@ class Value implements ArrayAccess, ValueWrapper
      */
     public function offsetExists($key)
     {
-        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof ArrayAccess))) {
+        if (is_array_accessible($this->value)) {
             return isset($this->value[$key]);
         }
 
@@ -104,7 +104,7 @@ class Value implements ArrayAccess, ValueWrapper
      */
     public function offsetSet($key, $value)
     {
-        if (is_array($this->value) || (is_object($this->value) && ($this->value instanceof ArrayAccess))) {
+        if (is_array_accessible($this->value)) {
             $this->value[$key] = $value;
 
             return;
@@ -191,7 +191,7 @@ class Value implements ArrayAccess, ValueWrapper
      */
     public function __toString()
     {
-        // TODO Write something for objects without __toString().
+        // TODO We need to write something for objects without __toString(), otherwise exception will be thrown.
         return (string) $this->value;
     }
 }

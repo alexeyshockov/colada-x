@@ -3,6 +3,7 @@
 namespace Colada
 {
     use Colada\X\LazyObjectProxy;
+    use InvalidArgumentException;
 
     if (!function_exists('\\Colada\\x')) {
         /**
@@ -35,10 +36,40 @@ namespace Colada
             return new LazyObjectProxy();
         }
     }
+
+    if (!function_exists('\\Colada\\lazy')) {
+        /**
+         * Wraps object to proxy, that collects all actions and plays them only when asked.
+         *
+         * Example:
+         * <code>
+         * use function Colada\lazy;
+         *
+         * $value = lazy(new \ArrayObject([1, 2, 3]))->count();
+         *
+         * echo $value(); // Will print "3".
+         * </code>
+         *
+         * @param mixed $object
+         *
+         * @return \Colada\X\LazyObjectProxy
+         */
+        function lazy($object)
+        {
+            if (!is_object($object)) {
+                throw new InvalidArgumentException('Only objects can be wrapped.');
+            }
+
+            return new LazyObjectProxy(function () use ($object) {
+                return $object;
+            });
+        }
+    }
 }
 
 namespace Colada\X
 {
+    use ArrayAccess;
     use Closure;
     use ReflectionFunction;
     use ReflectionMethod;
@@ -55,6 +86,20 @@ namespace Colada\X
         function id($value)
         {
             return $value;
+        }
+    }
+
+    if (!function_exists('\\Colada\\X\\is_array_accessible')) {
+        /**
+         * @internal
+         *
+         * @param mixed $value
+         *
+         * @return bool
+         */
+        function is_array_accessible($value)
+        {
+            return is_array($value) || (is_object($value) && ($value instanceof ArrayAccess));
         }
     }
 

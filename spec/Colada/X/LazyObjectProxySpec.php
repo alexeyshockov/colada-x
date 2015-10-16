@@ -25,17 +25,17 @@ class LazyObjectProxySpec extends ObjectBehavior
     {
         $date->format('c')->willReturn('2015-06-05T23:21:00+03:00')->shouldBeCalled();
 
-        $this->format('c')->shouldPlay($date, '2015-06-05T23:21:00+03:00');
+        $this->format('c')->shouldBePlayedAs($date, '2015-06-05T23:21:00+03:00');
 
         // It's still immutable.
-        $this->shouldBeEmpty($date, $date);
+        $this->shouldBeEmpty();
     }
 
     function it_records_array_access(ArrayObject $collection)
     {
         $collection->offsetGet(1)->willReturn('one')->shouldBeCalled();
 
-        $this[1]->shouldPlay($collection, 'one');
+        $this[1]->shouldBePlayedAs($collection, 'one');
 
         // It's still immutable.
         $this->shouldBeEmpty();
@@ -46,7 +46,7 @@ class LazyObjectProxySpec extends ObjectBehavior
         $date->getTimezone()->willReturn($timeZone)->shouldBeCalled();
         $timeZone->getName()->willReturn('+03:00')->shouldBeCalled();
 
-        $this->getTimezone()->getName()->shouldPlay($date, '+03:00');
+        $this->getTimezone()->getName()->shouldBePlayedAs($date, '+03:00');
 
         // It's still immutable.
         $this->shouldBeEmpty();
@@ -61,7 +61,7 @@ class LazyObjectProxySpec extends ObjectBehavior
     {
         $this->beConstructedWith('trim');
 
-        $this->shouldPlay(' Some value. ', 'Some value.');
+        $this->shouldBePlayedAs(' Some value. ', 'Some value.');
     }
 
     function it_treats_value_wrappers_specially(ValueWrapper $wrapper)
@@ -74,7 +74,7 @@ class LazyObjectProxySpec extends ObjectBehavior
         // See Value::getConstructorForValue().
         $this->beConstructedWith(function ($value) use ($wrapper) { return $wrapper; });
 
-        $this->shouldPlay('Some value.', 'Wrapped value.');
+        $this->shouldBePlayedAs('Some value.', 'Wrapped value.');
     }
 
     public function getMatchers()
@@ -88,7 +88,7 @@ class LazyObjectProxySpec extends ObjectBehavior
 
                 return true;
             },
-            'play' => function ($recorder, $value, $expectedResult) {
+            'bePlayedAs' => function ($recorder, $value, $expectedResult) {
                 $result = $recorder($value);
 
                 if ($result !== $expectedResult) {

@@ -10,6 +10,7 @@ use ArrayAccess;
  *
  * Will NOT be implemented: __isset(). Useless, because call to isset() or empty() is external and can not be wrapped.
  * Will NOT be implemented: __unset(). Useless, because call to unset() is external and can not be wrapped.
+ * Will NOT be implemented: __set(). Useless, because assigning a value is an external action and can not be wrapped.
  *
  * Will NOT be implemented: \Traversable support. Useless, because work with traversable value is external and can not be wrapped.
  * Will NOT be implemented: \Countable support. Useless, because call to count() is external and can not be wrapped.
@@ -37,55 +38,63 @@ class LazyObjectProxy implements ArrayAccess
 
     public function offsetGet($key)
     {
-        return $this->__call(__FUNCTION__, array($key));
+        return $this->__call(__FUNCTION__, [$key]);
     }
 
+    /**
+     * Call to this method should be available, because it can be called explicitly
+     *
+     * @param mixed $key
+     *
+     * @return static
+     */
     public function offsetUnset($key)
     {
-        return $this->__call(__FUNCTION__, array($key));
+        return $this->__call(__FUNCTION__, [$key]);
     }
 
     public function offsetExists($key)
     {
-        return $this->__call(__FUNCTION__, array($key));
+        return $this->__call(__FUNCTION__, [$key]);
     }
 
+    /**
+     * Call to this method should be available, because it can be called explicitly
+     *
+     * @param mixed $key
+     * @param mixed $value
+     *
+     * @return static
+     */
     public function offsetSet($key, $value)
     {
-        return $this->__call(__FUNCTION__, array($key, $value));
-    }
-
-    public function __set($property, $value)
-    {
-        return new static(function ($value) use ($property, $value) {
-            return $this->mapper->__invoke($value)->$property = $value;
-        });
+        return $this->__call(__FUNCTION__, [$key, $value]);
     }
 
     public function __get($property)
     {
-        return new static(function ($value) use ($property) {
-            return $this->mapper->__invoke($value)->$property;
+        return new static(function (...$arguments) use ($property) {
+            return $this->mapper->__invoke(...$arguments)->$property;
         });
     }
 
-    public function __call($method, $arguments)
+    public function __call($method, $methodArguments)
     {
-        return new static(function ($value) use ($method, $arguments) {
-            return call_user_func_array([$this->mapper->__invoke($value), $method], $arguments);
+        return new static(function (...$arguments) use ($method, $methodArguments) {
+            return call_user_func_array([$this->mapper->__invoke(...$arguments), $method], $methodArguments);
         });
     }
 
     /**
      * Play recorded actions on concrete value
      *
-     * @param mixed $value
+     * @param mixed ...$arguments
      *
      * @return mixed
      */
-    public function __invoke($value)
+    public function __invoke(...$arguments)
     {
-        return $this->__asClosure()->__invoke($value);
+        return $this->__asClosure()->__invoke(...$arguments);
     }
 
     /**
@@ -97,9 +106,9 @@ class LazyObjectProxy implements ArrayAccess
      */
     public function __asClosure()
     {
-        return function ($value) {
+        return function (...$arguments) {
             // In the end return original value.
-            $result = $this->mapper->__invoke($value);
+            $result = $this->mapper->__invoke(...$arguments);
             if (is_object($result) && ($result instanceof ValueWrapper)) {
                 $result = $result->__getWrappedValue();
             }
