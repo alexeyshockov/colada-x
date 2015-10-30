@@ -2,10 +2,6 @@
 
 namespace spec\Colada\X;
 
-use ArrayObject;
-use DateTime;
-use DateTimeZone;
-use Colada\X\ValueWrapper;
 use PhpSpec\ObjectBehavior;
 use PhpSpec\Exception\Example\FailureException;
 
@@ -21,7 +17,10 @@ class LazyObjectProxySpec extends ObjectBehavior
         $this->shouldHaveType('Colada\X\LazyObjectProxy');
     }
 
-    function it_records_method_calls(DateTime $date)
+    /**
+     * @param \DateTime $date
+     */
+    function it_records_method_calls($date)
     {
         $date->format('c')->willReturn('2015-06-05T23:21:00+03:00')->shouldBeCalled();
 
@@ -31,7 +30,10 @@ class LazyObjectProxySpec extends ObjectBehavior
         $this->shouldBeEmpty();
     }
 
-    function it_records_array_access(ArrayObject $collection)
+    /**
+     * @param \ArrayObject $collection
+     */
+    function it_records_array_access($collection)
     {
         $collection->offsetGet(1)->willReturn('one')->shouldBeCalled();
 
@@ -41,7 +43,11 @@ class LazyObjectProxySpec extends ObjectBehavior
         $this->shouldBeEmpty();
     }
 
-    function it_records_chain_calls(DateTime $date, DateTimeZone $timeZone)
+    /**
+     * @param \DateTime $date
+     * @param \DateTimeZone $timeZone
+     */
+    function it_records_chain_calls($date, $timeZone)
     {
         $date->getTimezone()->willReturn($timeZone)->shouldBeCalled();
         $timeZone->getName()->willReturn('+03:00')->shouldBeCalled();
@@ -64,7 +70,10 @@ class LazyObjectProxySpec extends ObjectBehavior
         $this->shouldBePlayedAs(' Some value. ', 'Some value.');
     }
 
-    function it_treats_value_wrappers_specially(ValueWrapper $wrapper)
+    /**
+     * @param \Colada\X\ValueWrapper $wrapper
+     */
+    function it_treats_value_wrappers_specially($wrapper)
     {
         $wrapper->__getWrappedValue()->willReturn('Wrapped value.')->shouldBeCalled();
         // Explicit call is needed, because we will use this mock inside a closure, and PHPSpec will not be able to
@@ -79,7 +88,7 @@ class LazyObjectProxySpec extends ObjectBehavior
 
     public function getMatchers()
     {
-        return array(
+        return [
             'beEmpty' => function ($recorder) {
                 $value = 'Some value.';
                 if ($value !== $recorder($value)) {
@@ -97,6 +106,6 @@ class LazyObjectProxySpec extends ObjectBehavior
 
                 return true;
             }
-        );
+        ];
     }
 }

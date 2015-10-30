@@ -27,7 +27,7 @@ class Value implements ArrayAccess, ValueWrapper
      *
      * @return \Closure
      */
-    public static function getConstructorForValue(array $helpers = array())
+    public static function getConstructorForValue(array $helpers = [])
     {
         return function ($value) use ($helpers) {
             return new static($value, $helpers);
@@ -38,7 +38,7 @@ class Value implements ArrayAccess, ValueWrapper
      * @param mixed $value
      * @param array $helpers
      */
-    public function __construct($value = null, array $helpers = array())
+    public function __construct($value = null, array $helpers = [])
     {
         $this->value = $value;
         $this->helpers = $helpers;
@@ -170,8 +170,8 @@ class Value implements ArrayAccess, ValueWrapper
      */
     public function __call($name, $arguments)
     {
-        if (is_object($this->value) && is_callable(array($this->value, $name))) {
-            $method = array($this->value, $name);
+        if (is_object($this->value) && is_callable([$this->value, $name])) {
+            $method = [$this->value, $name];
         } elseif (isset($this->helpers[$name])) {
             // TODO Check callable.
             $method = $this->helpers[$name];

@@ -50,13 +50,13 @@ class ValueHelperCollectionBuilderSpec extends ObjectBehavior
     {
         $this->registerStringyHelper()->shouldReturn($this);
 
-        $this->build()->shouldHaveKeyWithValue('startsWith', array('\\Stringy\\StaticStringy', 'startsWith'));
+        $this->build()->shouldHaveKeyWithValue('startsWith', ['\\Stringy\\StaticStringy', 'startsWith']);
     }
 
     function it_registers_class_static_methods()
     {
         $this->registerClassMethods('\\Colada\\X\\Helpers\\CarbonHelper')->shouldReturn($this);
 
-        $this->build()->shouldHaveKeyWithValue('toCarbon', array('\\Colada\\X\\Helpers\\CarbonHelper', 'toCarbon'));
+        $this->build()->shouldHaveKeyWithValue('toCarbon', ['\\Colada\\X\\Helpers\\CarbonHelper', 'toCarbon']);
     }
 }

@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0"
+        "php": "~5.6 || ~7.0"
     },
     "require-dev": {
         "phpspec/phpspec": "~2.3",
@@ -25,9 +25,9 @@
         "nesbot/carbon": "~1.0"
     },
     "suggest": {
-        "lstrojny/functional-php": "To work with collections in a functional way",
-        "danielstjules/stringy": "As a helper for strings",
-        "nesbot/carbon": "As a helper for working with date and time"
+        "lstrojny/functional-php": "Some functional primitives for PHP.",
+        "danielstjules/stringy": "Powerful string manipulations.",
+        "nesbot/carbon": "Powerful date and time manupulations."
     },
     "autoload": {
         "psr-4": {

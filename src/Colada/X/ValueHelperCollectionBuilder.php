@@ -15,7 +15,7 @@ class ValueHelperCollectionBuilder
 
     public function __construct()
     {
-        $this->helpers = array();
+        $this->helpers = [];
     }
 
     /**
@@ -49,9 +49,9 @@ class ValueHelperCollectionBuilder
                 return !(0 === strpos($method, '__'));
             });
         }
-        $helpers = array();
+        $helpers = [];
         foreach ($methods as $method) {
-            $helpers[$method] = array($class, $method);
+            $helpers[$method] = [$class, $method];
         }
 
         $this->helpers = array_merge($this->helpers, $helpers);
@@ -95,7 +95,7 @@ class ValueHelperCollectionBuilder
             $functions['user']
         );
 
-        $helpers = array();
+        $helpers = [];
         /** @var ReflectionFunction $function */
         foreach ($functions as $function) {
             if ($function->getNamespaceName() === $namespace) {
