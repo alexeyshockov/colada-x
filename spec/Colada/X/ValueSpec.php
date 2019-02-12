@@ -49,19 +49,6 @@ class ValueSpec extends ObjectBehavior
         $this->format('c')->shouldWrapValue('2015-06-05T23:21:00+03:00');
     }
 
-    function it_uses_helper_if_method_is_not_available()
-    {
-        $helpers = [
-            'customFormat' => function ($date, $format) { return $date->format($format); }
-        ];
-        // We cannot use mock, because it defines __call() method.
-        $date = new DateTime('2015-06-05T23:21:00+03:00');
-
-        $this->beConstructedWith($date, $helpers);
-
-        $this->customFormat('c')->shouldWrapValue('2015-06-05T23:21:00+03:00');
-    }
-
     public function getMatchers()
     {
         return [

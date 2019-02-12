@@ -17,7 +17,7 @@ use ArrayAccess;
  *
  * Will NOT be implemented: __toString(). This method can't be collected, it should always return a string.
  *
- * @author Alexey Shockov <alexey@shockov.com>
+ * @author Alexey Shokov <alexey@shockov.com>
  */
 class LazyObjectProxy implements ArrayAccess
 {

@@ -10,7 +10,7 @@
     },
     "authors": [
         {
-            "name":     "Alexey Shockov",
+            "name":     "Alexey Shokov",
             "email":    "alexey@shockov.com",
             "homepage": "http://alexey.shockov.com/"
         }
@@ -19,19 +19,14 @@
         "php": "~5.6 || ~7.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "~2.3",
-        "lstrojny/functional-php": "~1.0",
-        "danielstjules/stringy": "~2.1",
-        "nesbot/carbon": "~1.0"
+        "phpspec/phpspec": "~2.5"
     },
     "suggest": {
-        "lstrojny/functional-php": "Some functional primitives for PHP.",
-        "danielstjules/stringy": "Powerful string manipulations.",
-        "nesbot/carbon": "Powerful date and time manupulations."
+        "lstrojny/functional-php": "Some functional primitives for PHP"
     },
     "autoload": {
         "psr-4": {
-            "Colada\\X\\": "src/Colada/X"
+            "Colada\\X\\": "src/"
         },
         "files": [
             "src/functions.php"

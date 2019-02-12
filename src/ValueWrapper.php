@@ -3,7 +3,7 @@
 namespace Colada\X;
 
 /**
- * @author Alexey Shockov <alexey@shockov.com>
+ * @author Alexey Shokov <alexey@shockov.com>
  */
 interface ValueWrapper
 {

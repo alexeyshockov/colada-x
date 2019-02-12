@@ -6,9 +6,9 @@ use ArrayAccess;
 use BadMethodCallException;
 
 /**
- * Immutable value wrapper.
+ * Immutable value wrapper
  *
- * @author Alexey Shockov <alexey@shockov.com>
+ * @author Alexey Shokov <alexey@shockov.com>
  */
 class Value implements ArrayAccess, ValueWrapper
 {
@@ -18,30 +18,21 @@ class Value implements ArrayAccess, ValueWrapper
     private $value;
 
     /**
-     * @var array
-     */
-    private $helpers;
-
-    /**
-     * @param array $helpers
-     *
      * @return \Closure
      */
-    public static function getConstructorForValue(array $helpers = [])
+    public static function getConstructorForValue()
     {
-        return function ($value) use ($helpers) {
-            return new static($value, $helpers);
+        return function ($value) {
+            return new static($value);
         };
     }
 
     /**
      * @param mixed $value
-     * @param array $helpers
      */
-    public function __construct($value = null, array $helpers = [])
+    public function __construct($value = null)
     {
         $this->value = $value;
-        $this->helpers = $helpers;
     }
 
     /**
@@ -172,13 +163,8 @@ class Value implements ArrayAccess, ValueWrapper
     {
         if (is_object($this->value) && is_callable([$this->value, $name])) {
             $method = [$this->value, $name];
-        } elseif (isset($this->helpers[$name])) {
-            // TODO Check callable.
-            $method = $this->helpers[$name];
-
-            array_unshift($arguments, $this->value);
         } else {
-            throw new BadMethodCallException('Unknown method "' . $name . '".');
+            throw new BadMethodCallException('Unknown method "' . $name . '"');
         }
 
         $result = call_user_func_array($method, $arguments);
@@ -191,7 +177,8 @@ class Value implements ArrayAccess, ValueWrapper
      */
     public function __toString()
     {
-        // TODO We need to write something for objects without __toString(), otherwise exception will be thrown.
+        // For objects without __toString() an exception will be thrown. This is OK, because the same will happen if
+        // __toString() is called directly on them.
         return (string) $this->value;
     }
 }
