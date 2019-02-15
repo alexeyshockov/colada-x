@@ -74,3 +74,8 @@ $hasActiveUsers = $users->exists(\Colada\x()->isActive()->__asClosure());
 ### Laravel 4 Collections
 
 The same problem as described above with Doctrine.
+
+## Alernatives
+
+If you need only the basic functionaly, take a look at `invoke()`, `invoke_first()`, `invoke_if()`, `invoke_last()`, 
+`invoker()` from a great [functional-php library](https://github.com/lstrojny/functional-php).

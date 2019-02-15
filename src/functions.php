@@ -29,9 +29,13 @@ namespace Colada
          * );
          * </code>
          *
-         * @return \Colada\X\LazyObjectProxy
+         * @api
+         *
+         * @param null|string $t Return class type hint (for PHPStorm, see .phpstorm.meta.php in the package's root)
+         *
+         * @return callable
          */
-        function x()
+        function x($t = null)
         {
             return new LazyObjectProxy();
         }
@@ -50,9 +54,11 @@ namespace Colada
          * echo $value(); // Will print "3".
          * </code>
          *
+         * @api
+         *
          * @param mixed $object
          *
-         * @return \Colada\X\LazyObjectProxy
+         * @return callable
          */
         function lazy($object)
         {
@@ -77,8 +83,6 @@ namespace Colada\X
 
     if (!function_exists('\\Colada\\X\\id')) {
         /**
-         * @internal
-         *
          * @param $value
          *
          * @return mixed
@@ -91,8 +95,6 @@ namespace Colada\X
 
     if (!function_exists('\\Colada\\X\\is_array_accessible')) {
         /**
-         * @internal
-         *
          * @param mixed $value
          *
          * @return bool
@@ -112,28 +114,31 @@ namespace Colada\X
          *
          * @see https://wiki.php.net/rfc/closurefromcallable
          *
-         * @internal
-         *
          * @param callable $callback
          *
          * @return Closure
          */
         function as_closure(callable $callback)
         {
-            if (is_object($callback) && ($callback instanceof Closure)) {
-                $closure = $callback;
-            } elseif (is_object($callback)) {
-                // Object with __invoke().
-                $closure = (new ReflectionObject($callback))->getMethod('__invoke')->getClosure($callback);
-            } elseif (is_array($callback) && is_object($callback[0])) {
-                // Object method.
-                $closure = (new ReflectionMethod($callback[0], $callback[1]))->getClosure($callback[0]);
-            } elseif (is_array($callback)) {
-                // Static method.
-                $closure = (new ReflectionMethod($callback[0], $callback[1]))->getClosure();
+            if (method_exists('Closure','fromCallable')) {
+                // Available as of PHP 7.1
+                $closure = Closure::fromCallable($callback);
             } else {
-                // Function name as a string.
-                $closure = (new ReflectionFunction($callback))->getClosure();
+                if (is_object($callback) && ($callback instanceof Closure)) {
+                    $closure = $callback;
+                } elseif (is_object($callback)) {
+                    // Object with __invoke().
+                    $closure = (new ReflectionObject($callback))->getMethod('__invoke')->getClosure($callback);
+                } elseif (is_array($callback) && is_object($callback[0])) {
+                    // Object method.
+                    $closure = (new ReflectionMethod($callback[0], $callback[1]))->getClosure($callback[0]);
+                } elseif (is_array($callback)) {
+                    // Static method.
+                    $closure = (new ReflectionMethod($callback[0], $callback[1]))->getClosure();
+                } else {
+                    // Function name as a string.
+                    $closure = (new ReflectionFunction($callback))->getClosure();
+                }
             }
 
             return $closure;

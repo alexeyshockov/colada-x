@@ -31,5 +31,8 @@
         "files": [
             "src/functions.php"
         ]
+    },
+    "scripts": {
+        "spec": "vendor/bin/phpspec run"
     }
 }
