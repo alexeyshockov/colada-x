@@ -10,9 +10,10 @@ matrix:
     - php: 7.1
     - php: 7.2
     - php: 7.3
+    - php: 7.4
 
-before_install:
-  - composer self-update
+before_script:
+  - phpenv config-rm xdebug.ini
 
 install:
   # --prefer-source to pass GitHub limits (see https://twitter.com/travisci/status/297761892775100418 for example).
